@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 
 # portia.pl - event-parametizing pre-processor for beta-Juliet.
 # v2001.02.01 Chris Pressey, Cat's-Eye Technologies.

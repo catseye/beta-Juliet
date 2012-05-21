@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/bin/env perl
 
 # bj.pl - beta-Juliet interpreter/simulator in Perl 5
 # v2001.02.01 Chris Pressey, Cat's-Eye Technologies.
