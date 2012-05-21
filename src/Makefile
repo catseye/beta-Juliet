@@ -1,5 +1,5 @@
 # GNU Makefile for 2Iota.
-# $Id: Makefile 519 2010-04-28 19:30:24Z cpressey $
+# $Id: Makefile 658 2010-07-21 17:33:26Z cpressey $
 
 PROG=2iota
 CC?=gcc
@@ -39,7 +39,7 @@ OBJS=	symbol${O} symstr${O} \
 all: ${PROG}${EXE}
 
 ${PROG}${EXE}: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o ${PROG} $(LIBS)
+	$(CC) $(OBJS) -o ${PROG} $(LIBS)
 
 symbol${O}: symbol.c symbol.h
 	$(CC) $(CFLAGS) -c symbol.c -o symbol${O}
