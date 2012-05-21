@@ -1,5 +1,5 @@
 /*
- * Copyright (c)2004 Cat's Eye Technologies.  All rights reserved.
+ * Copyright (c)2004-2010 Cat's Eye Technologies.  All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
 /*
  * parse.c
  * Recursive-descent parser for 2Iota.
- * $Id: parse.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: parse.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <stdio.h>
@@ -81,7 +81,7 @@ decl(struct scan_st *sc)
 	} else if (tokeq(sc, "event")) {
 		struct event *e;
 
-		e = event_new(etab);
+		e = event_new(event_table);	/* XXX global? */
 		scan(sc);
 		event_decl_name(sc, e);
 		while(tokeq(sc, ",")) {
@@ -133,7 +133,7 @@ time_spec(struct scan_st *sc, struct etime *et)
 	long secs, msecs;
 	char unit[16];
 
-	while (isdigit(sc->token[0])) {
+	while (isdigit((int)sc->token[0])) {
 		n = atof(sc->token);
 		scan(sc);
 		strncpy(unit, sc->token, 16);

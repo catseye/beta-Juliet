@@ -33,7 +33,7 @@
 /*
  * symbol.c
  * Symbol and symbol table housekeeping and manipulation for 2Iota.
- * $Id: symbol.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: symbol.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <stdio.h>
@@ -79,8 +79,10 @@ symbol_define(struct symbol_table *stab, char *token, int type)
 	struct symbol *new_sym;
 
 	MALLOC(new_sym, symbol, "symbol");
-	if ((new_sym->token = strdup(token)) == NULL)
+        new_sym->token = malloc(strlen(token) + 1);
+	if (new_sym->token == NULL)
 		errx(1, "Could not allocate symbol lexeme");
+        strcpy(new_sym->token, token);
 	new_sym->type = type;
 	new_sym->next = stab->head;
 	stab->head = new_sym;
@@ -143,7 +145,7 @@ symbol_print(struct symbol *sym)
 void
 symbol_dump(int indent, struct symbol *sym)
 {
-	char *ty;
+	const char *ty;
 	int i;
 
 	for (i = 0; i < indent; i++)

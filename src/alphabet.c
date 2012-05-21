@@ -33,7 +33,7 @@
 /*
  * alphabet.c
  * Alphabet housekeeping and manipulation for 2Iota.
- * $Id: alphabet.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: alphabet.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <stdio.h>
@@ -76,6 +76,7 @@ alphabet_append(struct alphabet *alpha, struct symbol *sym)
 void
 alphabet_free(struct alphabet *alpha)
 {
+	alpha = alpha;	/* XXX */
 }
 
 struct alpha_entry *

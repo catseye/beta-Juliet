@@ -33,11 +33,12 @@
 /*
  * debug.c
  * Debugging (dumping, tracing...) routines for 2Iota.
- * $Id: debug.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: debug.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 #include "symbol.h"
 #include "symstr.h"
@@ -51,7 +52,7 @@
 int	trace_flags = 0;
 
 void
-debug_trace(int flag, char *fmt, ...)
+debug_trace(int flag, const char *fmt, ...)
 {
 	va_list args;
 	int i;
@@ -103,18 +104,18 @@ debug_trace(int flag, char *fmt, ...)
 }
 
 void
-debug_dump(char *what)
+debug_dump(const char *what)
 {
 	if (!strcmp(what, "symbols"))
 		symbol_table_dump(0, gstab);
 	else if (!strcmp(what, "alphabets"))
 		symbol_table_dump(0, astab);
 	else if (!strcmp(what, "events"))
-		event_table_dump(etab);
+		event_table_dump(event_table);
 	else if (!strcmp(what, "queue"))
-		equeue_dump(eq);
+		equeue_dump(event_queue);
 	else if (!strcmp(what, "history"))
-		ehist_dump(eh);
+		ehist_dump(event_hist);
 	else if (strlen(what) == 0 || !strcmp(what, "all"))
 		debug_dump_all();
 	else {

@@ -1,12 +1,12 @@
 /*
  * debug.h
  * Debugging structures and prototypes for 2Iota.
- * $Id: debug.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: debug.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
-void		debug_trace(int, char *, ...);
+void		debug_trace(int, const char *, ...);
 
-void		debug_dump(char *);
+void		debug_dump(const char *);
 void		debug_dump_all(void);
 
 extern int	trace_flags;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c)2004 Cat's Eye Technologies.  All rights reserved.
+ * Copyright (c)2004-2010 Cat's Eye Technologies.  All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -34,14 +34,14 @@
 /*
  * main.c
  * 2iota - Reference interpreter for the 2Iota programming language.
- * $Id: main.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: main.c 545 2010-04-30 14:27:14Z cpressey $
  */
 
 #include <sys/types.h>
 #include <sys/wait.h>
 
 #include <stdio.h>
-#include <sysexits.h>
+#include <stdlib.h>
 #include <unistd.h>
 
 #include "scan.h"
@@ -59,23 +59,36 @@
 
 /* GLOBALS */
 
-struct symbol_table	*gstab;	/* general symbol table */
-struct symbol_table	*astab;	/* symbol table for alphabets */
-struct event_table	*etab;	/* global table of events */
-struct equeue		*eq;	/* global event queue */
-struct ehist		*eh;	/* global event history log */
+struct symbol_table	*gstab;		/* general symbol table */
+struct symbol_table	*astab;		/* symbol table for alphabets */
+struct event_table	*event_table;	/* global table of events */
+struct equeue		*event_queue;	/* global event queue */
+struct ehist		*event_hist;	/* global event history log */
 
 int			interactive = 0;
 
 /* FUNCTIONS */
+
+static void
+usage(void)
+{
+	fprintf(stderr, "usage: 2iota [-dit] {-c event} srcfile ...\n");
+	fprintf(stderr, "       -d: Dump loaded events and alphabets\n");
+	fprintf(stderr, "       -i: Start interactive 2iota command line\n");
+	fprintf(stderr, "       -t: Trace events, queue, and history\n");
+	fprintf(stderr, " -c event: Cause named event initially\n");
+	exit(1);
+}
+
+/* MAIN */
 
 int
 main(int argc, char **argv)
 {
 	struct scan_st *sc;
 	struct symstr *ss;
-	int ch;
 	int do_dump = 0;
+	int argn;
 
 #ifdef DETECT_LEAKS
 	GC_find_leak = 1;
@@ -85,44 +98,52 @@ main(int argc, char **argv)
 	
 	gstab = symbol_table_new();
 	astab = symbol_table_new();
-	etab = event_table_new();
-	eq = equeue_new();
-	eh = ehist_new();
+	event_table = event_table_new();
+	event_queue = equeue_new();
+	event_hist = ehist_new();
 
 	/* Parse arguments. */
 
-	while ((ch = getopt(argc, argv, "c:dit")) != -1) {
-		switch(ch) {
-		case 'c':	/* cause initial event */
-			ss = symstr_create(gstab, optarg);
-			equeue_insert(eq, ss, NULL); 
+	for (argn = 1; argn < argc; argn++) {
+                if (argv[argn][0] == '-') {
+			switch(argv[argn][1]) {
+			case 'c':	/* cause initial event */
+				argn++;
+				if (argn >= argc)
+					usage();
+				ss = symstr_create(gstab, argv[argn]);
+				equeue_insert(event_queue, ss, NULL); 
+				break;
+			case 'd':
+				do_dump = 1;
+				break;
+			case 'i':	/* run the interactive cmdline */
+				interactive = 1;
+				break;
+			case 't':	/* trace events as they happen */
+				trace_flags |= (TRACE_EVENTS |
+						TRACE_QUEUE |
+						TRACE_HISTORY);
+				break;
+			default:
+				usage();
+			}
+		} else {
 			break;
-		case 'd':
-			do_dump = 1;
-			break;
-		case 'i':	/* run the interactive cmdline */
-			interactive = 1;
-			break;
-		case 't':	/* trace events as they happen */
-			trace_flags |=
-			    (TRACE_EVENTS | TRACE_QUEUE | TRACE_HISTORY);
-			break;
-		case '?':
-		default:
-			usage();
 		}
 	}
-	argc -= optind;
-	argv += optind;
 	
 	/* Parse the input file. */
 
-	while (argc > 0) {
-		sc = scan_open(argv[0]);
-		two_iota(sc);
-		scan_close(sc);
-		argc--;
-		argv++;
+	while (argn < argc) {
+		sc = scan_open(argv[argn]);
+		if (sc != NULL) {
+			two_iota(sc);
+			scan_close(sc);
+		} else {
+			fprintf(stderr, "WARNING: Couldn't open %s\n", argv[argn]);
+		}
+		argn++;
 	}
 
 	if (do_dump)
@@ -131,15 +152,8 @@ main(int argc, char **argv)
 	if (interactive)
 		cmdline();
 	else
-		ii_engine_run(etab, eq, eh);
+		ii_engine_run(event_table, event_queue, event_hist);
 
 	/* symbol_table_free(gstab); */
 	exit(0);
-}
-
-void
-usage(void)
-{
-	fprintf(stderr, "usage: 2iota [-dit] [-c event] srcfile ...\n");
-	exit(EX_USAGE);
 }

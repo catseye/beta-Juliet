@@ -1,7 +1,7 @@
 /*
  * symstr.h
  * Symbol string structures and prototypes for 2Iota.
- * $Id: symstr.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: symstr.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #ifndef __SYMSTR_H
@@ -41,7 +41,7 @@ struct symstr_component {
 #define	SYMSTR_BIND_OUTSIDE_ALPHABET	 6
 #define	SYMSTR_BIND_NOT_IMPLEMENTED	 7
 
-extern char *		 symstr_bind_result[];
+extern const char *		 symstr_bind_result[];
 
 /* housekeeping */
 struct symstr		*symstr_new(void);

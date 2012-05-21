@@ -1,5 +1,5 @@
 /*
- * Copyright (c)2004 Cat's Eye Technologies.  All rights reserved.
+ * Copyright (c)2004-2010 Cat's Eye Technologies.  All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
 /*
  * symstr.c
  * Symbol strings for 2Iota.
- * $Id: symstr.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: symstr.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <ctype.h>
@@ -46,7 +46,7 @@
 #include "symstr.h"
 #include "2iota.h"
 
-char *symstr_bind_result[] = {
+const char *symstr_bind_result[] = {
 	"Bound OK",
 	"Mismatch between Literals",
 	"String too Short",
@@ -85,12 +85,12 @@ symstr_create(struct symbol_table *stab, char *s)
 	i = 0;
 	ss = symstr_new();
 	while (s[i] != '\0') {
-		while (isspace(s[i]) && s[i] != '\0')
+		while (isspace((int)s[i]) && s[i] != '\0')
 			i++;
 		if (s[i] == '\0')
 			break;
 		j = 0;
-		while (!isspace(s[i]) && s[i] != '\0' && j < 128)
+		while (!isspace((int)s[i]) && s[i] != '\0' && j < 128)
 			word[j++] = s[i++];
 		word[j] = '\0';
 		if ((sym = symbol_lookup(stab, word)) == NULL)
@@ -286,7 +286,9 @@ symstr_substitute(struct symstr *pat, struct symbol_table *stab)
 			symstr_append(dest, patc->sym, NULL, 0, SYMSTR_OP_NOP);
 		}
 	}
-	
+
+	stab = stab; /* XXX */
+
 	return(dest);
 }
 

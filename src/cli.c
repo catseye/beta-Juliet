@@ -1,5 +1,5 @@
 /*
- * Copyright (c)2004 Cat's Eye Technologies.  All rights reserved.
+ * Copyright (c)2004-2010 Cat's Eye Technologies.  All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,10 +33,11 @@
 /*
  * cli.c
  * Command-line interface for 2iota.
- * $Id: cli.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: cli.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <ctype.h>			/* XXX implement scan.c on strings, eh? */
+#include <string.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,7 +54,7 @@
 
 int		tokenize_args(char *);	/* XXX implement scan.c on strings, eh? */
 
-void
+static void
 signal_handler(int signo)
 {
 	caught_signal = signo;
@@ -92,7 +93,7 @@ do_cmd(char *cmd)
 
 	if (!strcmp(rcmd, "cause")) {
 		ss = symstr_create(gstab, args);
-		equeue_insert(eq, ss, NULL);
+		equeue_insert(event_queue, ss, NULL);
 		return(0);
 	}
 
@@ -101,7 +102,7 @@ do_cmd(char *cmd)
 		struct event *e;
 
 		ss = symstr_create(gstab, args);
-		for (e = etab->head; e != NULL; e = e->next) {
+		for (e = event_table->head; e != NULL; e = e->next) {
 			symstr_dump(ss);
 			fprintf(stderr, " binds to ");
 			symstr_dump(e->name);
@@ -142,8 +143,9 @@ do_cmd(char *cmd)
 		struct equeue *neq;
 		
 		neq = equeue_new();
-		ii_engine_step(etab, eq, eh, neq);
-		equeue_transfer(eq, neq);
+		ii_engine_step(event_table, event_queue,
+			       event_hist, neq);
+		equeue_transfer(event_queue, neq);
 
 		return(0);
 	}
@@ -151,7 +153,7 @@ do_cmd(char *cmd)
 	if (!strcmp(rcmd, "walk")) {
 		caught_signal = 0;
 		signal(SIGINT, signal_handler);
-		ii_engine_walk(etab, eq, eh);
+		ii_engine_walk(event_table, event_queue, event_hist);
 		signal(SIGINT, SIG_DFL);
 		return(0);
 	}
@@ -159,7 +161,7 @@ do_cmd(char *cmd)
 	if (!strcmp(rcmd, "run")) {
 		caught_signal = 0;
 		signal(SIGINT, signal_handler);
-		ii_engine_run(etab, eq, eh);
+		ii_engine_run(event_table, event_queue, event_hist);
 		signal(SIGINT, SIG_DFL);
 		return(0);
 	}
@@ -185,31 +187,40 @@ do_cmd(char *cmd)
 	return(0);
 }
 
+char *null_string = NULL;
+
 int
 parse_cmd(char *cmd, char **rcmd, char **args)
 {
 	int i = 0, j = 0;
 
-	*rcmd = "";
-	*args = "";
+	if (null_string == NULL) {
+		null_string = malloc(1);
+                if (null_string == NULL)
+                        errx(1, "Could not allocate space for null string");
+                strcpy(null_string, "");
+	}
+
+	*rcmd = null_string;
+	*args = null_string;
 
 	i = strlen(cmd) - 1;
-	while(isspace(cmd[i])) {
+	while(isspace((int)cmd[i])) {
 		cmd[i] = '\0';
 		i--;
 	}
 
 	i = 0;
-	while (isspace(cmd[i]) && cmd[i] != '\0')
+	while (isspace((int)cmd[i]) && cmd[i] != '\0')
 		i++;
 	if (cmd[i] == '\0')
 		return(0);
 	*rcmd = &cmd[i];
-	while (!isspace(cmd[i]) && cmd[i] != '\0')
+	while (!isspace((int)cmd[i]) && cmd[i] != '\0')
 		i++;
 	j = i;
 	if (cmd[i] != '\0') {
-		while (isspace(cmd[i]) && cmd[i] != '\0')
+		while (isspace((int)cmd[i]) && cmd[i] != '\0')
 			i++;
 		if (cmd[i] != '\0')
 			*args = &cmd[i];

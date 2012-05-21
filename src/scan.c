@@ -1,5 +1,5 @@
 /*
- * Copyright (c)2004 Cat's Eye Technologies.  All rights reserved.
+ * Copyright (c)2004-2010 Cat's Eye Technologies.  All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -33,7 +33,7 @@
 /*
  * scan.c
  * Lexical scanner for 2Iota.
- * $Id: scan.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: scan.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <ctype.h>
@@ -75,19 +75,20 @@ scan_close(struct scan_st *sc)
 }
 
 void
-scan_error(struct scan_st *sc, char *fmt, ...)
+scan_error(struct scan_st *sc, const char *fmt, ...)
 {
 	va_list args;
-	char err[256];
+
+	fprintf(stderr, "Error (line %d, column %d, token '%s'): ",
+	    sc->lino, sc->columno, sc->token);
 
 	va_start(args, fmt);
-	vsnprintf(err, 255, fmt, args);
+	vfprintf(stderr, fmt, args);
 
-	fprintf(stderr, "Error (line %d, column %d, token '%s'): %s.\n",
-	    sc->lino, sc->columno, sc->token, err);
+	fprintf(stderr, ".\n");
 }
 
-int
+static int
 scan_char(struct scan_st *sc, char *x)
 {	
 	*x = (char)getc(sc->in); sc->columno++;
@@ -111,7 +112,7 @@ scan(struct scan_st *sc)
 	/* Skip whitespace. */
 
 top:
-	while (isspace(x)) {
+	while (isspace((int)x)) {
 		if (x == '\n') {
 			sc->lino++;
 			sc->columno = 0;
@@ -133,8 +134,8 @@ top:
 	 * digit (not a sign or decimal point.)
 	 */
 
-	if (isdigit(x) && !feof(sc->in)) {
-		while ((isdigit(x) || x == '.') && !feof(sc->in)) {
+	if (isdigit((int)x) && !feof(sc->in)) {
+		while ((isdigit((int)x) || x == '.') && !feof(sc->in)) {
 			sc->token[i++] = x;
 			if (!scan_char(sc, &x)) return;
 		}
@@ -146,8 +147,8 @@ top:
 
 	/* Scan alphanumeric tokens. */
 
-	if (isalpha(x) && !feof(sc->in)) {
-		while ((isalpha(x) || isdigit(x) || x == '_') && !feof(sc->in)) {
+	if (isalpha((int)x) && !feof(sc->in)) {
+		while ((isalpha((int)x) || isdigit((int)x) || x == '_') && !feof(sc->in)) {
 			sc->token[i++] = x;
 			if (!scan_char(sc, &x)) return;
 		}
@@ -163,7 +164,7 @@ top:
 }
 
 void
-scan_expect(struct scan_st *sc, char *x)
+scan_expect(struct scan_st *sc, const char *x)
 {
 	if (!strcmp(sc->token, x)) {
 		scan(sc);

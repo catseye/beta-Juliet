@@ -1,7 +1,7 @@
 /*
  * 2iota.h
  * Global variables and macros for 2Iota.
- * $Id: 2iota.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: 2iota.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #ifndef __2IOTA_H
@@ -12,7 +12,12 @@
 #endif
 
 #include <stdio.h>
-#include <err.h>
+/*#include <err.h>*/
+
+#define errx(err, msg) {				\
+	fprintf(stderr, "%s\n", msg);			\
+	exit(err);					\
+}
 
 #ifdef TRACK_ALLOCATION
 #define TRACK_MALLOC(pointer, structdesc)				\
@@ -40,15 +45,10 @@
 		TRACK_FREE(pointer, structdesc);			\
 	}
 
-extern struct symbol_table	*gstab;	/* general symbol table */
-extern struct symbol_table	*astab;	/* symbol table for alphabets */
-extern struct event_table	*etab;	/* global table of events */
-extern struct equeue		*eq;	/* global event queue */
-extern struct ehist		*eh;	/* global event history log */
-
-extern int			do_dump;
-extern int			interactive;
-
-void				usage(void);
+extern struct symbol_table	*gstab;		/* general symbol table */
+extern struct symbol_table	*astab;		/* symbol table for alphabets */
+extern struct event_table	*event_table;	/* global table of events */
+extern struct equeue		*event_queue;	/* global event queue */
+extern struct ehist		*event_hist;	/* global event history log */
 
 #endif /* !__2IOTA_H */

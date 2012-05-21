@@ -1,7 +1,7 @@
 /*
  * alphabet.h
  * Alphabet structures and prototypes for 2Iota.
- * $Id: alphabet.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: alphabet.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #ifndef __ALPHABET_H

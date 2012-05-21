@@ -33,7 +33,7 @@
 /*
  * ehist.c
  * Event history housekeeping and manipulation for 2Iota.
- * $Id: ehist.c 54 2004-04-23 22:51:09Z catseye $
+ * $Id: ehist.c 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #include <stdio.h>

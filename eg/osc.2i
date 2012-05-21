@@ -1,5 +1,8 @@
 // Description of a 2Hz oscillator in 2Iota.
 
+event Begin,
+	causes Oscillator goes High;
+
 event Oscillator goes High,
 	causes Oscillator goes Low
 	  after 0.5 s;

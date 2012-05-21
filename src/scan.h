@@ -1,7 +1,7 @@
 /*
  * scan.h
  * Lexical scanner structures and prototypes for 2Iota.
- * $Id: scan.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: scan.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #ifndef __SCAN_H
@@ -23,8 +23,8 @@ struct scan_st {
 
 extern struct scan_st *scan_open(char *);
 extern void scan_close(struct scan_st *);
-extern void scan_error(struct scan_st *, char *, ...);
+extern void scan_error(struct scan_st *, const char *, ...);
 extern void scan(struct scan_st *);
-extern void scan_expect(struct scan_st *, char *);
+extern void scan_expect(struct scan_st *, const char *);
 
 #endif /* !__SCAN_H */

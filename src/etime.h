@@ -1,17 +1,17 @@
 /*
  * etime.h
  * Time/duration structures and prototypes for 2Iota.
- * $Id: etime.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: etime.h 545 2010-04-30 14:27:14Z cpressey $
  */
 
 #ifndef __ETIME_H
 #define __ETIME_H
 
-#include <sys/time.h>
 #include <time.h>
 
 struct etime {
-	struct timespec		tv;
+        time_t  sec;
+        long    nsec;
 };
 
 void			 etime_set(struct etime *,

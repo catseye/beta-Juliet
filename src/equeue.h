@@ -1,7 +1,7 @@
 /*
  * equeue.h
  * Event queue structures and prototypes for 2Iota.
- * $Id: equeue.h 54 2004-04-23 22:51:09Z catseye $
+ * $Id: equeue.h 518 2010-04-28 17:48:38Z cpressey $
  */
 
 #ifndef __EQUEUE_H

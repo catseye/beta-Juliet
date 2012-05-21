@@ -1,69 +1,84 @@
-# BSD Makefile for 2Iota.
-# $Id: Makefile 54 2004-04-23 22:51:09Z catseye $
+# GNU Makefile for 2Iota.
+# $Id: Makefile 519 2010-04-28 19:30:24Z cpressey $
 
-CC=	gcc
-CFLAGS=	-I/usr/local/include -L/usr/local/lib -Wall
-LIBS=	
+PROG=2iota
+CC?=gcc
+STRIP?=strip
+O?=.o
+EXE?=
 
-.ifdef DEBUG
-CFLAGS+= -g
-.endif
+WARNS=	-Werror -W -Wall -Wstrict-prototypes -Wmissing-prototypes \
+	-Wpointer-arith	-Wno-uninitialized -Wreturn-type -Wcast-qual \
+	-Wwrite-strings -Wswitch -Wshadow -Wcast-align -Wchar-subscripts \
+	-Winline -Wnested-externs -Wredundant-decls
 
-.ifdef DETECT_LEAKS
-CFLAGS+= -DDETECT_LEAKS -I/usr/local/include -L/usr/local/lib
-LIBS+=	 -lgc
-.endif
+ifdef ANSI
+  CFLAGS+= -ansi -pedantic
+else
+  CFLAGS+= -std=c99 -D_POSIX_C_SOURCE=200112L
+endif
 
-OBJS=	symbol.o symstr.o \
-	alphabet.o event.o \
-	etime.o equeue.o ehist.o \
-	scan.o parse.o \
-	engine.o cli.o \
-	debug.o main.o
+CFLAGS+= ${WARNS} ${EXTRA_CFLAGS}
 
-all: 2iota
+ifdef DEBUG
+  CFLAGS+= -g
+endif
 
-2iota: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o 2iota $(LIBS)
+ifdef DETECT_LEAKS
+  CFLAGS+= -DDETECT_LEAKS -I/usr/local/include -L/usr/local/lib
+  LIBS+= -lgc
+endif
 
-symbol.o: symbol.c symbol.h
-	$(CC) $(CFLAGS) -c symbol.c -o symbol.o
+OBJS=	symbol${O} symstr${O} \
+	alphabet${O} event${O} \
+	etime${O} equeue${O} ehist${O} \
+	scan${O} parse${O} \
+	engine${O} cli${O} \
+	debug${O} main${O}
 
-symstr.o: symstr.c symstr.h symbol.h alphabet.h
-	$(CC) $(CFLAGS) -c symstr.c -o symstr.o
+all: ${PROG}${EXE}
 
-alphabet.o: alphabet.c alphabet.h symbol.h
-	$(CC) $(CFLAGS) -c alphabet.c -o alphabet.o
+${PROG}${EXE}: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o ${PROG} $(LIBS)
 
-event.o: event.c event.h alphabet.h symbol.h symstr.h debug.h
-	$(CC) $(CFLAGS) -c event.c -o event.o
+symbol${O}: symbol.c symbol.h
+	$(CC) $(CFLAGS) -c symbol.c -o symbol${O}
 
-etime.o: etime.c etime.h
-	$(CC) $(CFLAGS) -c etime.c -o etime.o
+symstr${O}: symstr.c symstr.h symbol.h alphabet.h
+	$(CC) $(CFLAGS) -c symstr.c -o symstr${O}
 
-equeue.o: equeue.c equeue.h symstr.h debug.h
-	$(CC) $(CFLAGS) -c equeue.c -o equeue.o
+alphabet${O}: alphabet.c alphabet.h symbol.h
+	$(CC) $(CFLAGS) -c alphabet.c -o alphabet${O}
 
-ehist.o: ehist.c ehist.h symstr.h debug.h
-	$(CC) $(CFLAGS) -c ehist.c -o ehist.o
+event${O}: event.c event.h alphabet.h symbol.h symstr.h debug.h
+	$(CC) $(CFLAGS) -c event.c -o event${O}
 
-scan.o: scan.c scan.h
-	$(CC) $(CFLAGS) -c scan.c -o scan.o
+etime${O}: etime.c etime.h
+	$(CC) $(CFLAGS) -c etime.c -o etime${O}
 
-parse.o: parse.c parse.h scan.h symbol.h
-	$(CC) $(CFLAGS) -c parse.c -o parse.o
+equeue${O}: equeue.c equeue.h symstr.h debug.h
+	$(CC) $(CFLAGS) -c equeue.c -o equeue${O}
 
-engine.o: engine.c engine.h event.h equeue.h
-	$(CC) $(CFLAGS) -c engine.c -o engine.o
+ehist${O}: ehist.c ehist.h symstr.h debug.h
+	$(CC) $(CFLAGS) -c ehist.c -o ehist${O}
 
-cli.o: cli.c cli.h symstr.h event.h debug.h
-	$(CC) $(CFLAGS) -c cli.c -o cli.o
+scan${O}: scan.c scan.h
+	$(CC) $(CFLAGS) -c scan.c -o scan${O}
 
-debug.o: debug.c debug.h
-	$(CC) $(CFLAGS) -c debug.c -o debug.o
+parse${O}: parse.c parse.h scan.h symbol.h
+	$(CC) $(CFLAGS) -c parse.c -o parse${O}
 
-main.o: main.c cli.h debug.h
-	$(CC) $(CFLAGS) -c main.c -o main.o
+engine${O}: engine.c engine.h event.h equeue.h
+	$(CC) $(CFLAGS) -c engine.c -o engine${O}
+
+cli${O}: cli.c cli.h symstr.h event.h debug.h
+	$(CC) $(CFLAGS) -c cli.c -o cli${O}
+
+debug${O}: debug.c debug.h
+	$(CC) $(CFLAGS) -c debug.c -o debug${O}
+
+main${O}: main.c cli.h debug.h
+	$(CC) $(CFLAGS) -c main.c -o main${O}
 
 clean:
-	rm -f *.o *.core 2iota
+	rm -f *.o *.core *.exe ${PROG}${EXE}
