@@ -1,8 +1,0 @@
-betaJuliet ::= Event {";" Event} ".".
-Event      ::= "event" Name {"," Property}.
-Property   ::= "caused" TimePrep Name {WhenTerm}
-             | "causes" Name ["immediately"] {WhenTerm}
-             | "duration" Number TimeUnit.
-TimePrep   ::= "before" | "after" | "by".
-TimeUnit   ::= "ms" | "s" | "m" | "h" | "d".
-WhenTerm   ::= "when" Name ">" Name.
