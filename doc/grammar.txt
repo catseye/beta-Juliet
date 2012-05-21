@@ -1,8 +1,32 @@
-betaJuliet ::= Event {";" Event} ".".
-Event      ::= "event" Name {"," Property}.
-Property   ::= "caused" TimePrep Name {WhenTerm}
-             | "causes" Name ["immediately"] {WhenTerm}
-             | "duration" Number TimeUnit.
-TimePrep   ::= "before" | "after" | "by".
-TimeUnit   ::= "ms" | "s" | "m" | "h" | "d".
-WhenTerm   ::= "when" Name ">" Name.
+twoIota		::= Decl {";" Decl} ".".
+Decl		::= Pragma | Alphabet | Event.
+
+Pragma		::= "pragma" <<<implementation-specific>>>.
+
+Alphabet	::= "alphabet" AlphabetName {"," SymbolName}.
+
+Event		::= "event" EventDeclName {"," Property}.
+Property	::= "causes" EventApplName ["after" TimeSpec] {WhenTerm}.
+
+TimeSpec	::= RationalNumber TimeUnit.
+TimeUnit	::= "ms" | "s" | "m" | "h" | "d".
+
+WhenTerm	::= "when" EventName ">" EventName.
+
+EventDeclName	::= EventDeclComp {EventDeclComp}.
+EventDeclComp	::= SymbolName | "(" ParamName "=" MatchExpr ")".
+
+MatchExpr	::= AlphabetName ["+"].
+
+EventApplName	::= EventApplComp {EventApplComp}.
+EventApplComp	::= SymbolName | "(" AlphabetExpr ")".
+
+AlphabetExpr	::= AlphabetTerm {"|" AlphabetTerm}.
+AlphabetTerm	::= "succ" ParamName
+		  | "pred" ParamName
+		  | "next" ParamName
+		  | "prev" ParamName
+		  | "first" AlphabetName
+		  | "last" AlphabetName
+		  | SymbolName
+		  .
