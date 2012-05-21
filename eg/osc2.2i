@@ -1,0 +1,8 @@
+// Description #2 of a 1KHz oscillator in 2Iota.
+
+alphabet Pulse,
+	Low, High;
+
+event Oscillator goes (State = Pulse),
+	causes Oscillator goes (succ State | first Pulse)
+	  after 0.001 s;

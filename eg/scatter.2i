@@ -1,0 +1,12 @@
+// Demonstration that 'after' clauses work correctly.
+
+event Go,
+	causes A after 1.0s,
+	causes B after 2.0s,
+	causes C after 3.0s,
+	causes D after 4.0s;
+
+event A;
+event B;
+event C;
+event D.

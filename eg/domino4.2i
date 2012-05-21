@@ -1,0 +1,12 @@
+// Description of yet another "domino sequence"
+// in 2Iota.  This is mainly to demonstrate the
+// failure modes (alphabet expressions after "|".)
+
+alphabet Domino,
+	One, Two, Three, Four, Five, Six, Seven;
+
+event Begin,
+	causes Domino One Falls;
+
+event Domino (N = Domino+) Falls,
+	causes Domino (next N | first Domino) Falls.

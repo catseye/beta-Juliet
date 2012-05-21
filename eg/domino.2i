@@ -1,0 +1,18 @@
+// Description of a finite "domino sequence" in 2Iota
+
+alphabet Domino,
+	One, Two, Three, Four, Five, Six, Seven;
+
+event Begin,
+	causes Domino One Falls;
+
+event Domino (N = Domino) Falls,
+	causes Domino (succ N) Falls;
+
+// Since this event is more specific than the above
+// event, it should be matched first:
+
+event Domino Seven Falls,
+	causes End;
+
+event End.

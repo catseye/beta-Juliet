@@ -1,0 +1,12 @@
+// Description of an unbounded  "domino sequence" in 2Iota.
+
+alphabet Domino,
+	One, Two, Three, Four, Five, Six, Seven;
+
+event Begin,
+	causes Domino One Falls;
+
+event Domino (N = Domino+) Falls,
+	causes Domino (succ N) Falls.
+
+

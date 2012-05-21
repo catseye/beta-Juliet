@@ -1,0 +1,13 @@
+// Description #3 of a burglar alarm in 2Iota
+
+event Window Switch is Broken,
+	causes Alarm when System was last Armed > System was last Disarmed;
+
+event Motion Detector is Triggered,
+	causes Alarm when System was last Armed > System was last Disarmed;
+
+event System was last Armed;
+event System was last Disarmed;
+
+event Alarm,
+	causes Alarm.

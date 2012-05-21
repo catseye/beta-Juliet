@@ -1,0 +1,10 @@
+// Description of a burglar alarm in 2Iota
+
+event Window Switch is Broken,
+  causes Alarm;
+
+event Motion Detector is Triggered,
+  causes Alarm;
+
+event Alarm,
+  causes Alarm.
