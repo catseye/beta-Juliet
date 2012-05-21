@@ -1,71 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<!-- encoding: UTF-8 -->
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <title>The 2Iota Programming Language</title>
-  <!-- begin html doc dynamic markup -->
-  <script type="text/javascript" src="/contrib/jquery-1.6.4.min.js"></script>
-  <script type="text/javascript" src="/scripts/documentation.js"></script>
-  <!-- end html doc dynamic markup -->
-</head>
-<body>
-
-<h1>2Iota</h1>
-
-<p>Language version 1.0, revision 2010.0428.
-<br/>©2004-2010 Cat's Eye Technologies.</p>
-
-<h2>Overview</h2>
-
-<p>2Iota is the successor language to the
-<a href="/projects/b_juliet/">beta-Juliet and Portia languages</a>.
-It is extremely similar — nearly identical — in syntax and semantics to these languages,
-with the following exceptions:</p>
-
-<ul>
-<li>2Iota is a single language rather than a pair of mutual languages;</li>
-<li>2Iota is Turing-Complete (or at least, closer to TC than beta-Juliet plus Portia);</li>
-<li>2Iota does not (yet) implement <code>caused after|before|by</code> clauses;</li>
-<li>2Iota explicitly reserves syntax for implementation-specific pragmas and system events;</li>
-<li>2Iota's reference implementation is written in C rather than Perl;</li>
-<li>2Iota's reference implementation actually implements delays.
-(Compiled as C99 with POSIX, delays have millisecond granularity; compiled
-as ANSI C they have second granularity.)</li>
-</ul>
-
-<h2>Events</h2>
-
-<p>2Iota is a fairly "pure" event-oriented language.  In 2Iota, the world is
-modelled as a set of <dfn>events</dfn> which have no inherent organization or ordering.
-One such set might be <code>Domino Falls</code>, <code>Cat Meows</code>,
-<code>Sun Sets</code>, <code>Address Line Six Goes High</code>
-and <code>Greengrocer Falls Asleep on Subway</code>.</p>
-
-<p>The occurence of each event may cause any number of other events to
-happen — these are termed <dfn>consequences</dfn> of the event.  These
-consequences may be conditional.  However, the only condition available for
-checking is: <em>given two events, which one happened more recently?</em></p>
-
-<h2>Patterns</h2>
-
-<p>The names of events in 2Iota may be literal strings of <dfn>symbols</dfn>, exemplified
-above, or they may be <dfn>patterns</dfn>.  Patterns contain <i>parameters</i>
-and act something like regular expressions.  Each parameter ranges over a
-specified <dfn>alphabet</dfn>.  When an event occurs which matches the name
-of an event, the parameters in that name are bound to the literal symbols in the
-occurring event.  These bound parameters may then be used in substitutions in
-the consequences.</p>
-
-<p>For example, if we have an alphabet called <code>Animal</code> that
-consists of the symbols <code>Dog Cat Ferret</code>, we can
-have an event <code>(X=Animal) Licks Itself</code> which has, as a
-consequence, <code>(X) Becomes Clean</code>.  Here <code>X</code>
-is a parameter.  This event will happen
-should some other event cause <code>Cat Licks Itself</code>; <code>X</code>
-will be bound to <code>Cat</code>, and this event will thus
-subsequently cause the event <code>Cat Becomes Clean</code>.</p>
-
 <h2>Modifiers</h2>
 
 <p>Unlike events, alphabets are ordered.  Each symbol
@@ -101,5 +33,3 @@ symbol-string over its alphabet instead.</li>
 <p>Note that all of these modifiers (except <code>succ</code>) can fail.  In this case,
 an alternate or <code>failure-mode</code> modifier or symbol can be given, and this
 will be used instead.</p>
-
-</body></html>
