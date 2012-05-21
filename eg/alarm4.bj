@@ -1,4 +1,7 @@
-// Description #3 of a burglar alarm in 2Iota
+// Description #4 of a burglar alarm in 2Iota (v2.0 only.)
+
+// This is an alternate version of description #3, where the events have
+// multi-symbol names, and which does not use any "caused after" clauses.
 
 event Window Switch is Broken,
 	causes Alarm when System was last Armed > System was last Disarmed;

@@ -1,4 +1,4 @@
-// Description of an unbounded  "domino sequence" in 2Iota.
+// Description of an unbounded  "domino sequence" in beta-Juliet v2.0.
 
 alphabet Domino,
 	One, Two, Three, Four, Five, Six, Seven;

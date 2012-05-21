@@ -1,15 +1,11 @@
-// Description of a bounded, and repeating,
-// "domino sequence" in 2Iota.  While this
-// is mainly to help look for memory leaks,
-// and to test the "first" and "last"
-// modifiers, it also tests specificity.
-// It should not matter where in the source
-// file the "Domino Seven Falls" event is
-// specified; it should be matched in
-// preference to the more general "Domino
-// (N = Domino+) Falls" event when the
-// literal event name "Domino Seven Falls"
-// is removed from the event queue.
+// Description of a bounded, and repeating, "domino sequence" in
+// beta-Juliet v2.0.  While this was written mainly to help look
+// for memory leaks in the implementation, and to test the "first"
+// and "last" modifiers, it also tests specificity.  It should not
+// matter where in the source file the "Domino Seven Falls" event
+// is specified; it should be matched in preference to the more
+// general "Domino (N = Domino+) Falls" event when the literal event
+// name "Domino Seven Falls" is removed from the event queue.
 
 alphabet Domino,
 	One, Two, Three, Four, Five, Six, Seven;

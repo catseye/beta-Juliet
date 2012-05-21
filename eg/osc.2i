@@ -1,4 +1,4 @@
-// Description of a 2Hz oscillator in 2Iota.
+// Description of a 2Hz oscillator in beta-Juliet v2.0
 
 event Begin,
 	causes Oscillator goes High;

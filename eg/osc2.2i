@@ -1,4 +1,4 @@
-// Description #2 of a 1KHz oscillator in 2Iota.
+// Description #2 of a 1KHz oscillator in beta-Juliet v2.0
 
 alphabet Pulse,
 	Low, High;

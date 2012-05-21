@@ -1,4 +1,4 @@
-// Description of a finite "domino sequence" in 2Iota
+// Description of a finite "domino sequence" in beta-Juliet v2.0
 
 alphabet Domino,
 	One, Two, Three, Four, Five, Six, Seven;

@@ -1,4 +1,4 @@
-// Description of a 1KHz oscillator in beta-Juliet
+// Description of a 1KHz oscillator in beta-Juliet v1.0
 
 event OscillatorGoesHigh,
   duration 0.001 s,
