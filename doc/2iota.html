@@ -1,21 +1,26 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- encoding: UTF-8 -->
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <title>The 2Iota Programming Language</title>
+  <!-- begin html doc dynamic markup -->
+  <script type="text/javascript" src="/contrib/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="/scripts/documentation.js"></script>
+  <!-- end html doc dynamic markup -->
 </head>
 <body>
 
 <h1>2Iota</h1>
 
 <p>Language version 1.0, revision 2010.0428.
-<br/>&copy;2004-2010 Cat's Eye Technologies.</p>
+<br/>©2004-2010 Cat's Eye Technologies.</p>
 
 <h2>Overview</h2>
 
 <p>2Iota is the successor language to the
 <a href="/projects/b_juliet/">beta-Juliet and Portia languages</a>.
-It is extremely similar &mdash; nearly identical &mdash; in syntax and semantics to these languages,
+It is extremely similar — nearly identical — in syntax and semantics to these languages,
 with the following exceptions:</p>
 
 <ul>
@@ -37,8 +42,8 @@ One such set might be <code>Domino Falls</code>, <code>Cat Meows</code>,
 <code>Sun Sets</code>, <code>Address Line Six Goes High</code>
 and <code>Greengrocer Falls Asleep on Subway</code>.</p>
 
-<p>The occurance of each event may cause any number of other events to
-happen &mdash; these are termed <dfn>consequences</dfn> of the event.  These
+<p>The occurence of each event may cause any number of other events to
+happen — these are termed <dfn>consequences</dfn> of the event.  These
 consequences may be conditional.  However, the only condition available for
 checking is: <em>given two events, which one happened more recently?</em></p>
 
@@ -75,7 +80,7 @@ to generate an unbounded sequence of symbol-strings, so long as each
 symbol in a string is in the same alphabet.</p>
 
 <p>Thus, for some alphabet, every symbol-string has one and only one successor.
-Again, though, there is one symbol-string which has no predecessor &mdash; the symbol-string
+Again, though, there is one symbol-string which has no predecessor — the symbol-string
 which is one symbol long, where that symbol is the first symbol of the alphabet.</p>
 
 <p>These concepts are implemented in 2Iota with <dfn>modifiers</dfn>.
@@ -83,13 +88,13 @@ When a parameter is named in a consequence, it is replaced by the value it is
 bound to, and this can be altered by one of the following modifiers:</p>
 
 <ul>
-<li><code>next</code> &mdash; assuming the value is a single symbol, use the next symbol
+<li><code>next</code> — assuming the value is a single symbol, use the next symbol
 in its alphabet instead;</li>
-<li><code>prev</code> &mdash; assuming the value is a single symbol, use the previous symbol
+<li><code>prev</code> — assuming the value is a single symbol, use the previous symbol
 in its alphabet instead;</li>
-<li><code>succ</code> &mdash; assuming the value is a symbol-string, use the successor
+<li><code>succ</code> — assuming the value is a symbol-string, use the successor
 symbol-string over its alphabet;</li>
-<li><code>pred</code> &mdash; assuming the value is a symbol-string, use the predecessor
+<li><code>pred</code> — assuming the value is a symbol-string, use the predecessor
 symbol-string over its alphabet instead.</li>
 </ul>
 
