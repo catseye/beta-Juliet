@@ -1,0 +1,8 @@
+// Description of a "domino sequence" in Portia and beta-Juliet
+
+alphabet Domino, One,Two,Three,Four,Five,Six,Seven;
+
+event Begin,                 causes DominoOneFalls;
+event Domino(N=Domino)Falls, causes Domino(succ N|Last)Falls;
+event DominoLastFalls,       causes End;
+event End.

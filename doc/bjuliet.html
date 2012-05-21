@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!-- encoding: UTF-8 -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="Description" content="Cat's Eye Technologies: Portia and beta-Juliet" />
+  <title>Cat's Eye Technologies: Portia and beta-Juliet</title>
+  <!-- begin html doc dynamic markup -->
+  <script type="text/javascript" src="/contrib/jquery-1.6.4.min.js"></script>
+  <script type="text/javascript" src="/scripts/documentation.js"></script>
+  <!-- end html doc dynamic markup -->
+</head>
+<body>
+<h1>beta-Juliet &amp; Portia</h1>
+ 
+<p style="font-size: 80%">&#160;<img src="/images/icons/copyright.gif"
+   width="12" height="12" alt="(c)" />2000-2004 <a href="/">Cat's Eye Technologies</a>.  All rights reserved.<br />
+    This software is OSI Certified Open Source Software.<br />
+    OSI Certified is a certification mark of the <a href="http://www.opensource.org/"><img
+    src="/images/icons/webicon.gif" alt="[WWW]" width="12" height="12" />Open Source Initiative</a>.<br />
+    See the file <a href="license.txt">license.txt</a> for license information.</p>
+
+<h2>Overview</h2>
+
+<p>The beta-Juliet language is not Turing-Complete by itself.
+Nor is the Portia pre-processor.  However, when used together, the
+intent is that they form a Turing-Complete language.</p>
+
+<h2>beta-Juliet</h2>
+
+<p><b>beta-Juliet</b> models the world as an unordered, unorganized set of
+events, such as <code>DominoFalls</code>, <code>CatMeows</code>, or
+<code>SunSets</code>.</p>
+
+<p>These events can cause, and be caused by other events.  In addition
+they can do so conditionally - but the only conditional available for
+checking is: <i>given two events, which one fired more recently?</i></p>
+
+<h2>Portia</h2>
+
+<p><b>Portia</b> is solely concerned with expanding parameterized events
+into series of concrete events, for example creating events
+<code>DominoOneFalls</code>, <code>DominoTwoFalls</code>, etc., from
+the generalized meta-event <code>Domino(N=Domino)Falls</code> where
+<code>Domino</code> is an <b>alphabet</b> over the range of dominoes.</p>
+
+<p>Without each other, these languages are interesting but not powerful.
+beta-Juliet cannot generalize, and therefore is not Turing-Complete.
+Portia cannot loop unrestrictively, and
+therefore is <i>also</i> not Turing-Complete.</p>
+
+<p>[Historical note: Portia, as it has stood for many years, cannot really generalize
+either, so the combination of beta-Juliet and Portia is still not Turing-Complete.]</p>
+
+</body></html>

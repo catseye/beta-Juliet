@@ -1,0 +1,9 @@
+// Description of a 1KHz oscillator in beta-Juliet
+
+event OscillatorGoesHigh,
+  duration 0.001 s,
+  causes OscillatorGoesLow;
+
+event OscillatorGoesLow,
+  duration 0.001 s,
+  causes OscillatorGoesHigh.

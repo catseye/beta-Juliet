@@ -1,0 +1,17 @@
+// Description of a weather-sensitive robot tarpaulin in beta-Juliet
+
+event RainBegins;
+event RainEnds;
+
+event SystemActivated;
+event SystemDeactivated;
+
+event CloseTarpaulin,
+ caused after RainBegins when SystemActivated > SystemDeactivated;
+
+event OpenTarpaulinTimer,
+ duration 10 m,
+ caused after RainEnds when SystemActivated > SystemDeactivated;
+
+event OpenTarpaulin,
+ caused after OpenTarpaulinTimer.

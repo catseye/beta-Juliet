@@ -1,0 +1,7 @@
+// Description of a "domino sequence" in beta-Juliet
+
+event Begin,             causes FirstDominoFalls;
+event FirstDominoFalls,  causes SecondDominoFalls;
+event SecondDominoFalls, causes ThirdDominoFalls;
+event ThirdDominoFalls,  causes End;
+event End.

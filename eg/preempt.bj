@@ -1,0 +1,10 @@
+// Causing events before events
+
+event OscillatorGoesHigh,
+  causes OscillatorGoesLow;
+
+event OscillatorGoesLow,
+  causes OscillatorGoesHigh;
+
+event HookedIn,
+  caused before OscillatorGoesLow.

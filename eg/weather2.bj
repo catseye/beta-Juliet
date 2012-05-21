@@ -1,0 +1,26 @@
+// Description #2 of a robot tarpaulin in beta-Juliet
+
+event Exception;
+
+event RainBegins,
+ causes Exception          when RainBegins > RainEnds;
+event RainEnds,
+ causes Exception          when RainEnds > RainBegins;
+
+event SystemActivated,
+ causes CloseTarpaulin     when RainBegins > RainEnds,
+ causes OpenTarpaulinTimer when RainEnds > RainBegins,
+ causes Exception          when SystemActivated > SystemDeactivated;
+
+event SystemDeactivated,
+ causes Exception          when SystemDeactivated > SystemActivated;
+
+event CloseTarpaulin,
+ caused after RainBegins   when SystemActivated > SystemDeactivated;
+
+event OpenTarpaulinTimer,
+ duration 10 m,
+ caused after RainEnds     when SystemActivated > SystemDeactivated;
+
+event OpenTarpaulin,
+ caused after OpenTarpaulinTimer.

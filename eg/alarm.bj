@@ -1,0 +1,10 @@
+// Description of a burglar alarm in beta-Juliet
+
+event WindowSwitchBroken,
+  causes Alarm;
+
+event MotionDetectorTriggered,
+  causes Alarm;
+
+event Alarm,
+  causes Alarm.
