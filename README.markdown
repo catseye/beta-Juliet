@@ -85,7 +85,40 @@ This event will happen should some other event cause `Cat Licks Itself`, and
 in this case, `X` will be bound to `Cat`, and this event will thus
 subsequently cause the event `Cat Becomes Clean`.
 
-(more to come)
+Modifiers
+---------
+
+Unlike events, alphabets are ordered.  Each symbol (except the first) in an
+alphabet has one and only one _predecessor_, and each symbol (except the last)
+has one and only one _successor_.
+
+So the range of symbols in an alphabet is bounded.  However, when considering
+a string of symbols (which I'll call a _symbol-string_), such as the name of
+an event, we can use lexicographic ordering to concoct something resembling
+Peano arithmetic to generate an unbounded sequence of symbol-strings, so long
+as each symbol in a string is in the same alphabet.
+
+Thus, for some alphabet, every symbol-string has one and only one successor.
+Again, though, there is one symbol-string which has no predecessor — the
+symbol-string which is one symbol long, where that symbol is the first symbol
+of the alphabet.
+
+These concepts are implemented in β-Juliet version 2.0 with _modifiers_.
+When a parameter is named in a consequence, it is replaced by the value it is
+bound to, and this can be altered by one of the following modifiers:
+
+* `next` — assuming the value is a single symbol, use the next symbol
+  in its alphabet instead;
+* `prev` — assuming the value is a single symbol, use the previous symbol
+  in its alphabet instead;
+* `succ` — assuming the value is a symbol-string, use the successor
+  symbol-string over its alphabet;
+* `pred` — assuming the value is a symbol-string, use the predecessor
+  symbol-string over its alphabet instead.
+
+Note that all of these modifiers (except `succ`) can fail.  In this case,
+an alternate or `failure-mode` modifier or symbol can be given, and this
+will be used instead.
 
 Extended Grammar
 ----------------
