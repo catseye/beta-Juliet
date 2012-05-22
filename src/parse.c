@@ -119,9 +119,8 @@ property(struct scan_st *sc, struct event *e)
 		scan(sc);
 		if (tokeq(sc, "by") || tokeq(sc, "after")) {
 			scan(sc);
-			ss = event_appl_name(sc, e);
+			ss = event_appl_literal(sc);
 			/*
-			 * TODO: check that ss is not a pattern
 			 * TODO: add ss to a set of "caused by"'s
 			 * TODO: after parsing, reconcile "caused by"'s
 			*/
@@ -238,6 +237,23 @@ event_appl_name(struct scan_st *sc, struct event *e)
 			    SYM_TYPE_LITERAL, SYM_LOOKUP_DEFINE);
 			symstr_append(ss, sym, NULL, 0, SYMSTR_OP_NOP);
 		}
+	}
+	return(ss);
+}
+
+/* Like event_appl_name, but does not allow patterns */
+struct symstr *
+event_appl_literal(struct scan_st *sc)
+{
+	struct symstr *ss;
+	struct symbol *sym;
+
+	ss = symstr_new();
+	while (tokne(sc, ",") && tokne(sc, ";") && tokne(sc, ".") &&
+	       tokne(sc, ">") && tokne(sc, "after") && tokne(sc, "when")) {
+		sym = symbol_name(sc, gstab,
+		    SYM_TYPE_LITERAL, SYM_LOOKUP_DEFINE);
+		symstr_append(ss, sym, NULL, 0, SYMSTR_OP_NOP);
 	}
 	return(ss);
 }
