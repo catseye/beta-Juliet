@@ -36,6 +36,17 @@ struct condition {
 	struct symstr		*later;
 };
 
+struct caused_by_table {
+	struct caused_by        *head;
+};
+
+struct caused_by {
+	struct caused_by	*next;
+	struct symstr		*cause; 	/* name of triggering event */
+	struct event		*effect;	/* event to trigger */
+};
+
+
 struct event_table	*event_table_new(void);
 struct event		*event_new(struct event_table *);
 struct consequence	*event_consequence_append(struct event *,
@@ -49,5 +60,12 @@ struct condition	*consequence_condition_append(struct consequence *,
 struct event		*event_find(struct event_table *, struct symstr *);
 int			 event_happen(struct event *, struct equeue *,
 				      struct ehist *);
+
+struct caused_by_table	*caused_by_table_new(void);
+struct caused_by	*caused_by_add(struct caused_by_table *,
+				       struct symstr *,
+				       struct event *);
+void			 caused_by_reconcile(struct event_table *,
+					     struct caused_by_table *);
 
 #endif /* !__EVENT_H */

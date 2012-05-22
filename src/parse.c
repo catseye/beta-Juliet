@@ -49,17 +49,23 @@
 #include "etime.h"
 #include "2iota.h"
 
+static struct caused_by_table *caused_by;
+
 /* ---------------- EVENT STRUCTURE (beta-Juliet) ----------------*/
 
 void
 two_iota(struct scan_st *sc)
 {
-	decl(sc);
+        caused_by = caused_by_table_new();
+
+        decl(sc);
 	while (tokeq(sc, ";")) {
 		scan(sc);
 		decl(sc);
 	}
 	scan_expect(sc, ".");
+
+	caused_by_reconcile(event_table, caused_by);
 }
 
 void
@@ -120,10 +126,7 @@ property(struct scan_st *sc, struct event *e)
 		if (tokeq(sc, "by") || tokeq(sc, "after")) {
 			scan(sc);
 			ss = event_appl_literal(sc);
-			/*
-			 * TODO: add ss to a set of "caused by"'s
-			 * TODO: after parsing, reconcile "caused by"'s
-			*/
+			(void)caused_by_add(caused_by, ss, e);
 		} else {
 			scan_error(sc, "Expected 'by' or 'after'");
 		}

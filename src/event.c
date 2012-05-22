@@ -224,3 +224,52 @@ event_table_dump(struct event_table *etab)
 	for (e = etab->head; e != NULL; e = e->next)
 		event_dump(e);
 }
+
+struct caused_by_table *
+caused_by_table_new(void)
+{
+	struct caused_by_table *ctab;
+
+	MALLOC(ctab, caused_by_table, "caused by table");
+
+	ctab->head = NULL;
+	return(ctab);
+}
+
+struct caused_by *
+caused_by_add(struct caused_by_table *ctab,
+	      struct symstr *ss, struct event *e)
+{
+	struct caused_by *c;
+
+	MALLOC(c, caused_by, "caused by");
+	
+	c->next = ctab->head;
+	c->cause = ss;
+	c->effect = e;
+
+	return(c);
+}
+
+void
+caused_by_reconcile(struct event_table *etab,
+		    struct caused_by_table *ctab)
+{
+	struct caused_by *c;
+	struct event *e;
+
+	for (c = ctab->head; c != NULL; c = c->next) {
+		int match = 0;
+
+		for (e = etab->head; e != NULL; e = e->next) {
+			/* TODO: */
+			/* if c->cause matches e->name, */
+			/* add a consequence from e to */
+			/* to c->effect */
+		}
+
+		if (!match) {
+			/* add an event */
+		}
+	}
+}
