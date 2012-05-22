@@ -20,6 +20,7 @@ struct event {
 	struct symstr		*name;		/* name of event */
 	struct consequence	*head;		/* what happens on trigger */
 	struct symbol_table	*params;	/* local bindings */
+	struct etime		duration;	/* for v1.0 compat */
 };
 
 struct consequence {

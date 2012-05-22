@@ -31,7 +31,7 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE. 
  */
 /*
- * event.h
+ * event.c
  * Event housekeeping and manipulation for 2Iota.
  * $Id: event.c 518 2010-04-28 17:48:38Z cpressey $
  */
@@ -69,6 +69,7 @@ event_new(struct event_table *etab)
 	e->name = symstr_new();
 	e->head = NULL;
 	e->params = symbol_table_new();
+	e->duration = etime_zero;
 	etab->head = e;
 	return(e);
 }
@@ -85,7 +86,7 @@ event_consequence_append(struct event *cause,
 	c->next = cause->head;
 	c->effect = effect;
 	if (delay == NULL)
-		c->delay = etime_zero;
+		c->delay = cause->duration;
 	else
 		c->delay = *delay;
 

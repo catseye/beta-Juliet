@@ -105,12 +105,17 @@ property(struct scan_st *sc, struct event *e)
 		if (tokeq(sc, "after")) {
 			scan(sc);
 			time_spec(sc, &et);
+			c = event_consequence_append(e, ss, &et);
+		} else {
+			c = event_consequence_append(e, ss, NULL);
 		}
-		c = event_consequence_append(e, ss, &et);
 		while(tokeq(sc, "when")) {
 			scan(sc);
 			when_term(sc, e);
 		}
+	} else if (tokeq(sc, "duration")) {
+		scan(sc);
+		time_spec(sc, &e->duration);
 	} else
 		scan_error(sc, "Expected 'causes'");
 }
