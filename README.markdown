@@ -61,6 +61,14 @@ grammar as it stands; version 2.0 extends many of the productions.
     Symbol     ::= <<one or more alphanumeric characters>>.
     Number     ::= <<rational number in decimal format>>.
 
+All keywords in the `TimePrep` production are synonyms.  In the original
+vision, `after` and `by` were synonyms, but `before` was meant to actually
+cause the event on which the `caused before` clause was attached, before
+the event named in the clause.  However, unless the event being caused
+can somehow cancel the event that it's being caused before, there is no
+semantic difference between `before` and `after` when it comes to "when"
+the event is triggered.
+
 Portia
 ------
 
@@ -73,6 +81,18 @@ dominoes.
 
 This mechanism (in fact, an extended form of it) is included in version 2.0
 of the β-Juliet language itself, so no pre-processor is needed for it.
+
+Computational Power
+-------------------
+
+The state space of a system described in β-Juliet version 1.0 is always
+finite, so β-Juliet version 1.0 cannot be Turing-complete.  The state space
+of a system described using Portia and β-Juliet version 1.0 may be much,
+much bigger than one described using just β-Juliet version 1.0, but it is
+still finite.
+
+Since β-Juliet version 2.0 allows unbounded sets of events to be described,
+it is more likely that it is Turing-complete.
 
 Patterns
 --------
@@ -168,6 +188,10 @@ event, to include multi-symbol events and event patterns.
                       | SymbolName
                       .
 
+Extra conditions, however, are placed on `caused by` clauses.  Both the name
+of the event which is the cause, and the name of the event which is being
+caused, must be literal symbol strings, not patterns.
+
 Implementations
 ---------------
 
@@ -177,5 +201,4 @@ Perl 5 script.  It does not implement delays.
 The reference implementation of β-Juliet version 2.0, called `2iota`, is
 written in C.  It implements delays (when compiled as ANSI C they have
 second granularity; when compiled as C99 with POSIX, they have millisecond
-granularity.)  It does not, however, implement `caused after|before|by`
-clauses.
+granularity.)  It does not yet, however, properly implement `caused` clauses.

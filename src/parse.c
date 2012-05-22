@@ -56,9 +56,9 @@ static struct caused_by_table *caused_by;
 void
 two_iota(struct scan_st *sc)
 {
-        caused_by = caused_by_table_new();
+	caused_by = caused_by_table_new();
 
-        decl(sc);
+	decl(sc);
 	while (tokeq(sc, ";")) {
 		scan(sc);
 		decl(sc);
@@ -126,8 +126,8 @@ property(struct scan_st *sc, struct event *e)
 		if (tokeq(sc, "by") || tokeq(sc, "after")) {
 			scan(sc);
 			/* TODO: we're also going to have to check that this
-                        event's name is a literal.  If it's not,
-                        this makes no sense... */
+			event's name is a literal.  If it's not,
+			this makes no sense... */
 			ss = event_appl_literal(sc);
 			(void)caused_by_add(caused_by, ss, e);
 		} else {
