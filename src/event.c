@@ -243,8 +243,9 @@ caused_by_add(struct caused_by_table *ctab,
 	struct caused_by *c;
 
 	MALLOC(c, caused_by, "caused by");
-	
+
 	c->next = ctab->head;
+	ctab->head = c;
 	c->cause = ss;
 	c->effect = e;
 
@@ -270,6 +271,11 @@ caused_by_reconcile(struct event_table *etab,
 
 		if (!match) {
 			/* add an event */
+			/* TODO: probably leaky */
+			/* TODO: only store effect as a name? */
+			e = event_new(etab);
+			e->name = c->cause;
+			event_consequence_append(e, c->effect->name, &etime_zero);
 		}
 	}
 }
