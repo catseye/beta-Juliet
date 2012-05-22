@@ -45,14 +45,21 @@ Basic Grammar
 The basic grammar of β-Juliet is given here in EBNF.  Version 1.0 uses this
 grammar as it stands; version 2.0 extends many of the productions.
 
-    betaJuliet ::= Event {";" Event} ".".
-    Event      ::= "event" Name {"," Property}.
-    Property   ::= "caused" TimePrep Name {WhenTerm}
-                 | "causes" Name ["immediately"] {WhenTerm}
-                 | "duration" Number TimeUnit.
+    betaJuliet ::= Decl {";" Decl} ".".
+    Decl       ::= Event.
+    Event      ::= "event" EventDecl {"," Property}.
+    EventDecl  ::= Symbol.
+    Property   ::= Caused | Causes | Duration.
+    Caused     ::= "caused" TimePrep EventAppl {WhenTerm}.
+    Causes     ::= "causes" EventAppl ["immediately"] {WhenTerm}
+    Duration   ::= "duration" TimeSpec.
     TimePrep   ::= "before" | "after" | "by".
+    TimeSpec   ::= RationalNumber TimeUnit.
     TimeUnit   ::= "ms" | "s" | "m" | "h" | "d".
-    WhenTerm   ::= "when" Name ">" Name.
+    EventAppl  ::= Symbol.
+    WhenTerm   ::= "when" EventAppl ">" EventAppl.
+    Symbol     ::= <<one or more alphanumeric characters>>.
+    Number     ::= <<rational number in decimal format>>.
 
 Portia
 ------
@@ -123,31 +130,33 @@ will be used instead.
 Extended Grammar
 ----------------
 
-β-Juliet version 2.0 explicitly reserves syntax for implementation-specific
-pragmas and system events.
+The grammar for β-Juliet version 2.0 builds on the productions from
+version 1.0, while replacing or adding the following productions.
 
-    betaJuliet      ::= Decl {";" Decl} ".".
-    Decl            ::= Pragma | Alphabet | Event.
+First, it allows alphabets as well as events to be declared.  It also
+explicitly reserves syntax for implementation-specific pragmas and
+system events (but does not define the meaning of any of these itself.)
 
-    Pragma          ::= "pragma" <<<implementation-specific>>>.
+    Decl          ::= Pragma | Alphabet | Event.
+    Pragma        ::= "pragma" <<<implementation-specific>>>.
+    Alphabet      ::= "alphabet" AlphabetName {"," Symbol}.
+    AlphabetName  ::= Symbol.
 
-    Alphabet        ::= "alphabet" AlphabetName {"," SymbolName}.
+It extends the `causes` syntax to include specifying a duration as part
+of it.
 
-    Event           ::= "event" EventDeclName {"," Property}.
-    Property        ::= "causes" EventApplName ["after" TimeSpec] {WhenTerm}.
+    Causes        ::= "causes" EventAppl ["after" TimeSpec] {WhenTerm}.
 
-    TimeSpec        ::= RationalNumber TimeUnit.
-    TimeUnit        ::= "ms" | "s" | "m" | "h" | "d".
+Lastly, it significantly extends the syntax for declaring, and using, an
+event, to include multi-symbol events and event patterns.
 
-    WhenTerm        ::= "when" EventName ">" EventName.
+    EventDecl     ::= EventDeclComp {EventDeclComp}.
+    EventDeclComp ::= Symbol | "(" ParamName "=" MatchExpr ")".
+    ParamName     ::= Symbol.
+    MatchExpr     ::= AlphabetName ["+"].
 
-    EventDeclName   ::= EventDeclComp {EventDeclComp}.
-    EventDeclComp   ::= SymbolName | "(" ParamName "=" MatchExpr ")".
-
-    MatchExpr       ::= AlphabetName ["+"].
-
-    EventApplName   ::= EventApplComp {EventApplComp}.
-    EventApplComp   ::= SymbolName | "(" AlphabetExpr ")".
+    EventAppl     ::= EventApplComp {EventApplComp}.
+    EventApplComp ::= SymbolName | "(" AlphabetExpr ")".
 
     AlphabetExpr    ::= AlphabetTerm {"|" AlphabetTerm}.
     AlphabetTerm    ::= "succ" ParamName
