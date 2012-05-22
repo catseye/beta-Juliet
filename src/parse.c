@@ -113,11 +113,26 @@ property(struct scan_st *sc, struct event *e)
 			scan(sc);
 			when_term(sc, e);
 		}
+	} else if (tokeq(sc, "caused")) {
+		struct symstr *ss;
+
+		scan(sc);
+		if (tokeq(sc, "by") || tokeq(sc, "after")) {
+			scan(sc);
+			ss = event_appl_name(sc, e);
+			/*
+			 * TODO: check that ss is not a pattern
+			 * TODO: add ss to a set of "caused by"'s
+			 * TODO: after parsing, reconcile "caused by"'s
+			*/
+		} else {
+			scan_error(sc, "Expected 'by' or 'after'");
+		}
 	} else if (tokeq(sc, "duration")) {
 		scan(sc);
 		time_spec(sc, &e->duration);
 	} else
-		scan_error(sc, "Expected 'causes'");
+		scan_error(sc, "Expected 'causes', 'caused', or 'duration'");
 }
 
 void
