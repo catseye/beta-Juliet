@@ -4,5 +4,5 @@ alphabet Pulse,
 	Low, High;
 
 event Oscillator goes (State = Pulse),
-	causes Oscillator goes (succ State | first Pulse)
-	  after 0.001 s;
+	causes Oscillator goes (next State | first Pulse)
+	  after 0.001 s.
