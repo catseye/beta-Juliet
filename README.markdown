@@ -69,6 +69,8 @@ can somehow cancel the event that it's being caused before, there is no
 semantic difference between `before` and `after` when it comes to "when"
 the event is triggered.
 
+Actually, that's not strictly true!  See "Grey Areas", below.
+
 Portia
 ------
 
@@ -196,6 +198,56 @@ event, to include multi-symbol events and event patterns.
 Extra conditions, however, are placed on `caused by` clauses.  Both the name
 of the event which is the cause, and the name of the event which is being
 caused, must be literal symbol strings, not patterns.
+
+Grey Areas
+----------
+
+It's interesting how you can go back to a language you threw together ten
+years ago, and find all kinds of things undefined in it.
+
+First case in point -- I never came out and said what `when A > B` was
+supposed to mean if either `A` or `B` has *never* happened.  Presumably, if
+`A` has never happened but `B` has, we can consider `B` to have happened
+more recently than `A`, and vice versa.  But if neither of them has ever
+happened, what then?  I suppose `A > B` and `B > A` are both false in that
+case.
+
+The second case is related.  When we define an event like
+
+    event Foo,
+        causes Bar,
+        causes Baz.
+
+...after `Foo` happens, is `Baz > Bar` true -- do these two consequent
+events occur in the order they are listed?  Or do they occur completely
+simultaneously (making both `Baz > Bar` and `Bar > Baz` false?)  Or worse,
+consider the seemingly "equivalent" case:
+
+    event Bar, caused by Foo;
+    event Baz, caused by Foo.
+
+I don't know if I ever intended to define the behaviour here, or how.  It is
+entirely possible to say that the order is undefined, requiring you to code
+up an explicit chain of events if you want to guarantee the order, like:
+
+    event Foo,
+        causes Temp,
+        causes Bar;
+    event Temp,
+        causes Baz.
+
+You could then argue that `Baz > Bar` must be true because it has a greater
+"causal distance" or whatever from `Foo`.
+
+This related to `caused before`, too; presumably, in
+
+    event Bar, caused before Foo;
+    event Baz, caused after Foo.
+
+...we can say with certainty that, after all the consequents of `Foo` have
+happened, `Baz > Bar`; so maybe there is a place for `caused before`.
+
+I'll think about it.
 
 Implementations
 ---------------
