@@ -263,10 +263,13 @@ caused_by_reconcile(struct event_table *etab,
 		int match = 0;
 
 		for (e = etab->head; e != NULL; e = e->next) {
-			/* TODO: */
-			/* if c->cause matches e->name, */
-			/* add a consequence from e to */
-			/* to c->effect */
+			if (symstr_is_literal(e->name) &&
+			    symstr_eq(c->cause, e->name)) {
+				event_consequence_append(e,
+				    c->effect->name, &etime_zero);
+				match = 1;
+				break;
+			}
 		}
 
 		if (!match) {

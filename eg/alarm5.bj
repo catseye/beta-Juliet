@@ -1,0 +1,18 @@
+// Description #5 of a burglar alarm in beta-Juliet (v2.0 only.)
+
+// Mainly to check that we can have an event that both causes
+// another event and is caused by yet another event.
+// (In this case, "Window Switch is Broken".)
+
+event Window Switch is Broken,
+        causes Warning Light Lit;
+
+event Window Switch is,
+        causes No That Is Wrong;
+
+event Window Switch is Broken Something,
+        causes No That Is Wrong;
+
+event Alarm,
+        caused by Window Switch is Broken,
+        causes Alarm.
