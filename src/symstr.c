@@ -223,6 +223,39 @@ symstr_remove(struct symstr *ss, struct symstr_component *sc)
 	symstr_component_free(sc);
 }
 
+int
+symstr_is_literal(struct symstr *ss)
+{
+	struct symstr_component *sc;
+
+	for (sc = ss->head; sc != NULL; sc = sc->next) {
+		if (sc->sym == NULL || sc->sym->type != SYM_TYPE_LITERAL ||
+                    sc->alphasym != NULL || sc->op != SYMSTR_OP_NOP)
+			return 0;
+	}
+
+	return 1;
+}
+
+/* Assumes both symstr's are literal. */
+int
+symstr_eq(struct symstr *a, struct symstr *b)
+{
+	struct symstr_component *sca, *scb;
+
+	for (sca = a->head, scb = b->head;
+             sca != NULL && scb != NULL;
+             sca = sca->next, scb = scb->next) {
+                if (strcmp(sca->sym->token, scb->sym->token))
+                        return 0;
+        }
+
+        if (sca != NULL || scb != NULL)
+              return 0;
+
+        return 1;
+}
+
 /*
  * Determine the specificity of the given symstr.
  * rank is the overall specificity rank:

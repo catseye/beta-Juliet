@@ -163,7 +163,12 @@ system events (but does not define the meaning of any of these itself.)
     AlphabetName  ::= Symbol.
 
 It extends the `causes` syntax to include specifying a duration as part
-of it.
+of it, using the `after` keyword.  The `duration` syntax is still supported;
+if it is given as a property of an event, the duration specified in it will
+be applied to all `causes` clauses on the event which do *not* include their
+own `after` delay.
+
+Note also that `caused` clauses do not support an `after` delay.
 
     Causes        ::= "causes" EventAppl ["after" TimeSpec] {WhenTerm}.
 

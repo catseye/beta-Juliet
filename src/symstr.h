@@ -61,6 +61,10 @@ void			 symstr_append_symstr(struct symstr *,
 					      struct symstr *);
 void			 symstr_remove(struct symstr *, struct symstr_component *);
 
+/* checking */
+int			 symstr_is_literal(struct symstr *);
+int			 symstr_eq(struct symstr *, struct symstr *);
+
 /* specificity */
 void			 symstr_specificity(struct symstr *, int *, int *);
 

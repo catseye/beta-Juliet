@@ -1,0 +1,23 @@
+// Example of unacceptable 'caused by' in beta-Juliet 2.0
+// Should produce four error messages during parsing:
+
+// Error (line 17, column 40, token ';'): Expected literal event name.
+// Error (line 17, column 40, token ';'): 'caused' clause may only appear on events with literal names.
+// Error (line 20, column 46, token ';'): Expected literal event name.
+// Error (line 23, column 24, token '.'): 'caused' clause may only appear on events with literal names.
+
+alphabet Domino,
+	One, Two, Three, Four, Five, Six, Seven;
+
+event Begin,
+	causes Domino One Falls;
+
+event Domino (N = Domino) Falls,
+        causes Domino (succ N) Falls,
+        caused by Domino (pred N) Falls;
+
+event Wow,
+        caused by Domino (first Domino) Falls;
+
+event Kraken (N = Domino) Unleashed,
+        caused by Begin.

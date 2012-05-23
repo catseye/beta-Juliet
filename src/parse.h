@@ -22,7 +22,6 @@ void		 time_spec(struct scan_st *, struct etime *);
 void		 event_decl_name(struct scan_st *, struct event *);
 void		 match_expr(struct scan_st *, struct event *, struct symbol *);
 struct symstr	*event_appl_name(struct scan_st *, struct event *);
-struct symstr	*event_appl_literal(struct scan_st *);
 void		 alphabet_expr(struct scan_st *, struct event *, struct symstr *);
 struct symstr_component
 		*alphabet_term(struct scan_st *, struct event *, struct symstr *);

@@ -123,15 +123,19 @@ property(struct scan_st *sc, struct event *e)
 		struct symstr *ss;
 
 		scan(sc);
-		if (tokeq(sc, "by") || tokeq(sc, "after")) {
+		if (tokeq(sc, "by") || tokeq(sc, "after") || tokeq(sc, "before")) {
 			scan(sc);
-			/* TODO: we're also going to have to check that this
-			event's name is a literal.  If it's not,
-			this makes no sense... */
-			ss = event_appl_literal(sc);
+			ss = event_appl_name(sc, e);
+                        if (!symstr_is_literal(ss)) {
+                              scan_error(sc, "Expected literal event name");
+                        }
+                        if (!symstr_is_literal(e->name)) {
+                              scan_error(sc, "'caused' clause may only appear "
+                                             "on events with literal names");
+                        }
 			(void)caused_by_add(caused_by, ss, e);
 		} else {
-			scan_error(sc, "Expected 'by' or 'after'");
+			scan_error(sc, "Expected 'by', 'after', or 'before'");
 		}
 	} else if (tokeq(sc, "duration")) {
 		scan(sc);
@@ -243,23 +247,6 @@ event_appl_name(struct scan_st *sc, struct event *e)
 			    SYM_TYPE_LITERAL, SYM_LOOKUP_DEFINE);
 			symstr_append(ss, sym, NULL, 0, SYMSTR_OP_NOP);
 		}
-	}
-	return(ss);
-}
-
-/* Like event_appl_name, but does not allow patterns */
-struct symstr *
-event_appl_literal(struct scan_st *sc)
-{
-	struct symstr *ss;
-	struct symbol *sym;
-
-	ss = symstr_new();
-	while (tokne(sc, ",") && tokne(sc, ";") && tokne(sc, ".") &&
-	       tokne(sc, ">") && tokne(sc, "after") && tokne(sc, "when")) {
-		sym = symbol_name(sc, gstab,
-		    SYM_TYPE_LITERAL, SYM_LOOKUP_DEFINE);
-		symstr_append(ss, sym, NULL, 0, SYMSTR_OP_NOP);
 	}
 	return(ss);
 }
