@@ -12,15 +12,15 @@ to be seperate languages.  So, as of this repo, they've been merged like this:
 
 * This language is called β-Juliet (a.k.a. beta-Juliet).
 * The language previously referred to as β-Juliet is now β-Juliet 1.0.
-* The language previously referred to as 2Iota is now β-Juliet 2.0.
+* The language previously referred to as 2Iota (plus minor modifications) is
+  now β-Juliet 2.0.
 * The reference interpreter for β-Juliet 2.0 is called `2iota`.
 * The file extension of a β-Juliet source file is typically `.bj`,
   although you may see `.2i` used as well.  The latter suggests that
   the source relies on features only in version 2.0.
 * The optional pre-processor for β-Juliet 1.0 is still called Portia.
-  Portia may or may not work with β-Juliet 2.0; I don't know yet.
-
-Further reorganization and stuff forthcoming.
+  Portia is not needed with β-Juliet 2.0, and may or may not work with it; I
+  don't know yet.
 
 Description
 -----------
@@ -36,8 +36,26 @@ of the event.  In addition, this causation may be conditional, but the only
 condition that is possible to check is: _given two events, which one happened
 more recently?_
 
-Basic Example
--------------
+Example
+-------
+
+    // Description of a weather-sensitive robot tarpaulin in beta-Juliet
+
+    event RainBegins;
+    event RainEnds;
+
+    event SystemActivated;
+    event SystemDeactivated;
+
+    event CloseTarpaulin,
+     caused after RainBegins when SystemActivated > SystemDeactivated;
+
+    event OpenTarpaulinTimer,
+     duration 10 m,
+     caused after RainEnds when SystemActivated > SystemDeactivated;
+
+    event OpenTarpaulin,
+     caused after OpenTarpaulinTimer.
 
 Basic Grammar
 -------------
@@ -61,15 +79,84 @@ grammar as it stands; version 2.0 extends many of the productions.
     Symbol     ::= <<one or more alphanumeric characters>>.
     Number     ::= <<rational number in decimal format>>.
 
-All keywords in the `TimePrep` production are synonyms.  In the original
-vision, `after` and `by` were synonyms, but `before` was meant to actually
-cause the event on which the `caused before` clause was attached, before
-the event named in the clause.  However, unless the event being caused
-can somehow cancel the event that it's being caused before, there is no
-semantic difference between `before` and `after` when it comes to "when"
-the event is triggered.
+### Some Explanations ###
 
-Actually, that's not strictly true!  See "Grey Areas", below.
+The syntax `A > B` can be read as `A has occurred more recently than B`.
+If `A` has occurred but `B` has never occurred, `A > B` is still true;
+however, if neither event has ever occurred, both `A > B` and `B > A` are
+false.
+
+`caused` and `causes` are two equivalent ways of expressing the causality
+rules between events.  If we say one event is `caused by` or `caused after`
+some other event, that is equivalent to saying the other event `causes` the
+one event.  Similarly, if we say one event is `caused before` some other
+event, that is equivalent to saying the other event `causes` the one event
+`immediately`.
+
+When we define an event like
+
+    event Foo,
+        causes Bar,
+        causes Baz.
+
+or like this
+
+    event Bar, caused by Foo;
+    event Baz, caused by Foo.
+
+...and during execution, after `Foo` happens, it is not guaranteed that
+either `Baz > Bar` or `Bar > Baz` is true; the order in which these two
+consequences occur does not necessarily follow source code order.  (But it
+is guaranteed that one or the other will be true, as both events will have
+happened.)
+
+If you require an ordering guarantee in a case like this, you should use
+an intermediate event, like
+
+    event Foo,
+        causes Temp,
+        causes Bar;
+    event Temp,
+        causes Baz.
+
+After `Temp` happens, `Baz > Bar` should be true.
+
+### `caused before` ###
+
+Alternately, in theory, you can use `caused before`, as in:
+
+    event Bar, caused before Foo;
+    event Baz, caused after Foo.
+
+After `Foo` happens, `Baz > Bar` should be true.
+
+(The `2iota` interpreter does not yet implement this guarantee, but I don't
+think that will stop me from releasing it.)
+
+...we can say with certainty that, after all the consequents of `Foo` have
+happened, `Baz > Bar`; so maybe there is a place for `caused before`.
+
+Some words on the purpose of `caused before` are in order.  In the original
+vision, `after` and `by` were synonyms, but `before` was meant to actually
+cause the event on which the `caused before` clause was attached, strictly
+*before* the event named in the clause.
+
+However, unless the event being caused can somehow *cancel* the event that
+it's being caused before, there is no semantic difference between `before`
+and `after` when it comes to "when" the event is triggered -- except, as we
+note here, the ordering guarantee.
+
+So `before` does not now necessarily mean strictly before the event; it could
+mean after the event, but before any other consequences that are given in
+`after` clauses.
+
+Still, multiple `before` consequences are nondeterministic, so in
+
+    event Bar, caused before Foo;
+    event Baz, caused before Foo.
+
+...after `Foo` happens, it is still not guaranteed that either `Baz > Bar`
+or `Bar > Baz` is true.
 
 Portia
 ------
@@ -199,56 +286,6 @@ Extra conditions, however, are placed on `caused by` clauses.  Both the name
 of the event which is the cause, and the name of the event which is being
 caused, must be literal symbol strings, not patterns.
 
-Grey Areas
-----------
-
-It's interesting how you can go back to a language you threw together ten
-years ago, and find all kinds of things undefined in it.
-
-First case in point -- I never came out and said what `when A > B` was
-supposed to mean if either `A` or `B` has *never* happened.  Presumably, if
-`A` has never happened but `B` has, we can consider `B` to have happened
-more recently than `A`, and vice versa.  But if neither of them has ever
-happened, what then?  I suppose `A > B` and `B > A` are both false in that
-case.
-
-The second case is related.  When we define an event like
-
-    event Foo,
-        causes Bar,
-        causes Baz.
-
-...after `Foo` happens, is `Baz > Bar` true -- do these two consequent
-events occur in the order they are listed?  Or do they occur completely
-simultaneously (making both `Baz > Bar` and `Bar > Baz` false?)  Or worse,
-consider the seemingly "equivalent" case:
-
-    event Bar, caused by Foo;
-    event Baz, caused by Foo.
-
-I don't know if I ever intended to define the behaviour here, or how.  It is
-entirely possible to say that the order is undefined, requiring you to code
-up an explicit chain of events if you want to guarantee the order, like:
-
-    event Foo,
-        causes Temp,
-        causes Bar;
-    event Temp,
-        causes Baz.
-
-You could then argue that `Baz > Bar` must be true because it has a greater
-"causal distance" or whatever from `Foo`.
-
-This related to `caused before`, too; presumably, in
-
-    event Bar, caused before Foo;
-    event Baz, caused after Foo.
-
-...we can say with certainty that, after all the consequents of `Foo` have
-happened, `Baz > Bar`; so maybe there is a place for `caused before`.
-
-I'll think about it.
-
 Implementations
 ---------------
 
@@ -258,4 +295,6 @@ Perl 5 script.  It does not implement delays.
 The reference implementation of β-Juliet version 2.0, called `2iota`, is
 written in C.  It implements delays (when compiled as ANSI C they have
 second granularity; when compiled as C99 with POSIX, they have millisecond
-granularity.)  It does not yet, however, properly implement `caused` clauses.
+granularity.)  It does not yet, however, properly implement the ordering
+guarantees between `caused before` and `caused after` clauses; nor does it
+parse `immediately`.
