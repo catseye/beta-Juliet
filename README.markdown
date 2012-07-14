@@ -81,7 +81,7 @@ grammar as it stands; version 2.0 extends many of the productions.
 
 ### Some Explanations ###
 
-The syntax `A > B` can be read as `A has occurred more recently than B`.
+The syntax `A > B` can be read as "`A` has occurred more recently than `B`".
 If `A` has occurred but `B` has never occurred, `A > B` is still true;
 however, if neither event has ever occurred, both `A > B` and `B > A` are
 false.
@@ -129,12 +129,6 @@ Alternately, in theory, you can use `caused before`, as in:
     event Baz, caused after Foo.
 
 After `Foo` happens, `Baz > Bar` should be true.
-
-(The `2iota` interpreter does not yet implement this guarantee, but I don't
-think that will stop me from releasing it.)
-
-...we can say with certainty that, after all the consequents of `Foo` have
-happened, `Baz > Bar`; so maybe there is a place for `caused before`.
 
 Some words on the purpose of `caused before` are in order.  In the original
 vision, `after` and `by` were synonyms, but `before` was meant to actually
@@ -290,7 +284,8 @@ Implementations
 ---------------
 
 There is a crude implementation of β-Juliet version 1.0 in the form of a
-Perl 5 script.  It does not implement delays.
+Perl 5 script.  It does not implement delays, but it does implement the
+ordering guarantees between `caused before` and `caused after`.
 
 The reference implementation of β-Juliet version 2.0, called `2iota`, is
 written in C.  It implements delays (when compiled as ANSI C they have
