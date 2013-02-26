@@ -102,7 +102,6 @@ void
 property(struct scan_st *sc, struct event *e)
 {
 	if (tokeq(sc, "causes")) {
-		struct consequence *c;
 		struct symstr *ss;
 		struct etime et = etime_zero;
 
@@ -111,9 +110,9 @@ property(struct scan_st *sc, struct event *e)
 		if (tokeq(sc, "after")) {
 			scan(sc);
 			time_spec(sc, &et);
-			c = event_consequence_append(e, ss, &et);
+			(void)event_consequence_append(e, ss, &et);
 		} else {
-			c = event_consequence_append(e, ss, NULL);
+			(void)event_consequence_append(e, ss, NULL);
 		}
 		while(tokeq(sc, "when")) {
 			scan(sc);
