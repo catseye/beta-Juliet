@@ -2,3 +2,6 @@ syntax: glob
 
 *.o
 
+syntax: regexp
+
+^src/2iota
