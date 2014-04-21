@@ -7,15 +7,23 @@ STRIP?=strip
 O?=.o
 EXE?=
 
-WARNS=	-Werror -W -Wall -Wstrict-prototypes -Wmissing-prototypes \
+WARNS?=	-Werror -W -Wall -Wstrict-prototypes -Wmissing-prototypes \
 	-Wpointer-arith	-Wno-uninitialized -Wreturn-type -Wcast-qual \
 	-Wwrite-strings -Wswitch -Wshadow -Wcast-align -Wchar-subscripts \
 	-Winline -Wnested-externs -Wredundant-decls
 
-ifdef ANSI
-  CFLAGS+= -ansi -pedantic
+ifeq ($(CC),8cc)
+  WARNS=-Wall -Werror
 else
-  CFLAGS+= -std=c99 -D_POSIX_C_SOURCE=200112L
+  ifeq ($(CC),pcc)
+    CFLAGS+=-I/usr/include/linux -I/usr/lib/gcc/x86_64-linux-gnu/4.6/include/
+  else
+    ifdef ANSI
+      CFLAGS+= -ansi -pedantic
+    else
+      CFLAGS+= -std=c99 -D_POSIX_C_SOURCE=200112L
+    endif
+  endif
 endif
 
 CFLAGS+= ${WARNS} ${EXTRA_CFLAGS}
