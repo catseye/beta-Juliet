@@ -1,26 +1,16 @@
 β-Juliet
 ========
 
-β-Juliet is a minimal event-oriented language which, as of version 2.0, is
-probably Turing-complete.
+Version 2.0
+| _Entry_ [@ catseye.tc](https://catseye.tc/node/beta-Juliet)
+| _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/2iota)
+| _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K#readme)
+∘ [Nested Modal Transducers](https://github.com/catseye/Nested-Modal-Transducers#readme)
 
-NOTE
-----
+- - - -
 
-I've decided that the languages β-Juliet and 2Iota are really too similar
-to be seperate languages.  So, as of this repo, they've been merged like this:
-
-* This language is called β-Juliet (a.k.a. beta-Juliet).
-* The language previously referred to as β-Juliet is now β-Juliet 1.0.
-* The language previously referred to as 2Iota (plus minor modifications) is
-  now β-Juliet 2.0.
-* The reference interpreter for β-Juliet 2.0 is called `2iota`.
-* The file extension of a β-Juliet source file is typically `.bj`,
-  although you may see `.2i` used as well.  The latter suggests that
-  the source relies on features only in version 2.0.
-* The optional pre-processor for β-Juliet 1.0 is still called Portia.
-  Portia is not needed with β-Juliet 2.0, and may or may not work with it; I
-  don't know yet.
+β-Juliet is a minimal event-oriented language which, as of version 2.0
+(see [historical note](#historical-note) below), is probably Turing-complete.
 
 Description
 -----------
@@ -293,3 +283,21 @@ second granularity; when compiled as C99 with POSIX, they have millisecond
 granularity.)  It does not yet, however, properly implement the ordering
 guarantees between `caused before` and `caused after` clauses; nor does it
 parse `immediately`.
+
+Historical Note
+---------------
+
+In 2012 I decided that the languages β-Juliet and 2Iota are really too similar
+to be seperate languages.  So, as of this repo, they've been merged like this:
+
+* This language is called β-Juliet (a.k.a. beta-Juliet).
+* The language previously referred to as β-Juliet is now β-Juliet 1.0.
+* The language previously referred to as 2Iota (plus minor modifications) is
+  now β-Juliet 2.0.
+* The reference interpreter for β-Juliet 2.0 is called `2iota`.
+* The file extension of a β-Juliet source file is typically `.bj`,
+  although you may see `.2i` used as well.  The latter suggests that
+  the source relies on features only in version 2.0.
+* The optional pre-processor for β-Juliet 1.0 is still called Portia.
+  Portia is not needed with β-Juliet 2.0, and may or may not work with it; I
+  don't know yet.
