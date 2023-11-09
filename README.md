@@ -4,8 +4,8 @@
 Version 2.0
 | _Entry_ [@ catseye.tc](https://catseye.tc/node/beta-Juliet)
 | _Wiki entry_ [@ esolangs.org](https://esolangs.org/wiki/2iota)
-| _See also:_ [Squishy2K](https://github.com/catseye/Squishy2K#readme)
-∘ [Nested Modal Transducers](https://github.com/catseye/Nested-Modal-Transducers#readme)
+| _See also:_ [Squishy2K](https://codeberg.org/catseye/Squishy2K#squishy2k)
+∘ [Nested Modal Transducers](https://codeberg.org/catseye/The-Dossier/src/branch/master/article/Nested-Modal-Transducers/README.md)
 
 - - - -
 
